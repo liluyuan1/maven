@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.lly.dao.OptionsDao">
+
+	<select id="selectOptionsAll" resultType="Options">
+		SELECT oid,OPTIONS,(SELECT COUNT(*) FROM vote WHERE vono=oid  GROUP BY vono ) votes
+		FROM OPTIONS WHERE otid=#{otid}
+	</select>
+
+	<select id="selectByIdOptions" resultType="Options">
+		SELECT * FROM OPTIONS WHERE otid = #{otid}
+	</select>
+
+	<insert id="addOptions">
+		insert into options(options,otid) values (#{options},#{otid})
+	</insert>
+
+	<delete id="deleteOptions">
+		delete from options where otid = #{tid}
+	</delete>
+
+	<delete id="deleteByIdOptions">
+		delete from options where oid = #{oid}
+	</delete>
+
+	<update id="updateOptions">
+		UPDATE OPTIONS SET OPTIONS = #{options} WHERE oid = #{oid}
+	</update>
+
+</mapper>

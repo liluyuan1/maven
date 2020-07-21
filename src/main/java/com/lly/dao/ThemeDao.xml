@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.lly.dao.ThemeDao">
+
+	<select id="selectByTitle" resultType="Theme">
+		SELECT * FROM theme WHERE title=#{title}
+	</select>
+
+	<insert id="addTheme" parameterType="Theme" useGeneratedKeys="true" keyProperty="tid">
+	        insert into theme(title,TYPES) values (#{title},#{types})
+	</insert>
+
+	<delete id="deleteTheme">
+		delete from  theme where tid = #{tid}
+	</delete>
+
+	<update id="updateTheme">
+		update theme set types = #{types} where tid = #{tid}
+	</update>
+
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+	<mapper namespace="com.lly.dao.UsersDao">
+	
+		<select id="selectUsers" resultType="Users">
+			SELECT * FROM users<include refid="cxyh"/>
+		</select>
+		
+		<sql id="cxyh">
+			<where>
+				<if test="uid != null">
+					uid = #{uid}
+				</if>
+				
+				<if test="uname != null and uname != ''">
+					and uname = #{uname}
+				</if>
+				
+				<if test="password != null and password != ''">
+					and password = #{password}
+				</if>
+				
+				<if test="realName != null and realName != ''">
+					and realName = #{realName}
+				</if>
+				
+				<if test="state != null">
+					and state = #{state}
+				</if>
+			</where>
+		</sql>
+		
+		<insert id="addUsers" parameterType="Users" useGeneratedKeys="true"
+		keyColumn="uid" keyProperty="uid">
+			INSERT INTO users(uname,PASSWORD) VALUE(#{uname},#{password})
+		</insert>
+	
+	</mapper>

@@ -1,0 +1,31 @@
+spring:
+  thymeleaf:
+    encoding: UTF-8
+    #开发时关闭缓存,不然没法看到实时页面(要重启)
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/templates/,classpath:/META-NF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql:///toupiao?serverTimezone=UTC
+    username: root
+    password: 1234
+
+mybatis:
+  type-aliases-package: com.lly.pojo
+  configuration:
+    auto-mapping-behavior: full
+    use-generated-keys: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  pageSizeZero: true
+

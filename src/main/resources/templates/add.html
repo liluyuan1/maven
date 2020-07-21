@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<HEAD>
+
+    <META content="IE=11.0000"
+          http-equiv="X-UA-Compatible">
+
+    <META http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <TITLE>发布新投票</TITLE>
+    <LINK href="css/style.css" rel="stylesheet" type="text/css">
+
+    <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+
+
+    <SCRIPT type="text/javascript">
+
+        window.onload = function () {
+            $("#title").blur(function(){
+                var title = $(this).val();
+                    $.post("title",{title:title},function(data){
+                        if(data == true){
+                            alert("标题已存在");
+                        }
+                    },"json")
+
+            })
+        };
+        function check() {
+
+            var option1 = $(".voteoptions p:first-child input[name^='options']").val();
+            var option2 = $(".voteoptions p:last-child input[name^='options']").val();
+            if(option1 == option2){
+                alert("投票选项不能一致");
+                return false;
+            }else {
+                return true;
+            }
+            return false;
+        }
+  /*  $(function(){
+        $(".delete").click(function(){
+            $(this).parent().remove();
+
+        })
+    });*/
+
+
+
+        function AddOption(){
+            $(".voteoptions P:last-child").after
+            ("<P><INPUT name='options' class='input-text' type='text' required='required'>&nbsp;<a onclick='shanchu()'>删除</a></P>")
+        }
+        function shanchu(){
+            $(".voteoptions P:last-child").remove();
+        }
+
+
+    </SCRIPT>
+
+
+    <META name="GENERATOR" content="MSHTML 11.00.10586.420">
+</HEAD>
+<BODY>
+<DIV class="wrap" id="header"><IMG src="images/logo.gif"></DIV>
+
+<DIV class="wrap" id="navbar">
+    <DIV class="profile">您好，<span th:text="${session.users.getUname()}">admin</span>
+        <SPAN class="return"><A href="voteList">返回列表</A></SPAN>
+        <SPAN class="addnew"><A href="addView">添加新投票</A></SPAN>
+        <SPAN class="modify"><A href="whView">维护</A></SPAN>
+        <SPAN class="return"><A
+                href="zhuxiao">注销</A></SPAN></DIV>
+    <DIV class="search" th:if="${wh == 1}">
+        <FORM action="whView" method="post">
+            <INPUT name="title" th:value="${title}" class="input-text" type="text">
+            <INPUT name="submit" class="input-button" type="submit" value=""/>
+        </FORM>
+    </DIV>
+    <DIV class="search" th:if="${wh != 1}">
+        <FORM action="voteList" method="post">
+            <INPUT name="title" class="input-text" type="text">
+            <INPUT name="submit" class="input-button" type="submit" value=""/>
+        </FORM>
+    </DIV>
+</DIV>
+<DIV class="box" id="voteManage">
+    <H2>添加新投票</H2>
+    <DIV class="content">
+        <FORM onsubmit="return check();" action="addVote" method="post">
+            <DL>
+                <DT>投票内容：</DT>
+                <DD th:if="${types} != null">
+                    <INPUT name="title" class="input-text"  th:value="${title}" type="text" readonly="true">
+                </DD>
+                <DD th:if="${types} == null">
+                    <INPUT name="title" id="title"  class="input-text"  type="text" required="required">
+                </DD>
+                <DT>投票类型：</DT>
+                <DD th:if="${types == 1}">
+                    <INPUT name="type"  type="radio"  value="1" checked="checked">单选
+                    <INPUT name="type" type="radio" value="2">多选
+                </DD>
+                <DD th:if="${types != 1}">
+                    <INPUT name="type" type="radio"  value="1">单选
+                    <INPUT name="type" type="radio" value="2"  checked="checked">多选
+                </DD>
+                <DT>投票选项：</DT>
+                <DD class="voteoptions" th:if="${types != null}">
+                    <P th:each="op,stat:${session.optionsList}">
+
+                        <INPUT th:name="options_+${op.getOid()}" class="input-text" th:value="${op.getOptions()}" type="text" required="required">
+                        <a class="delete" th:if="${stat.count} gt 2">删除</a>
+                    </P>
+                </DD>
+                <DD class="voteoptions" th:if="${types == null}">
+                    <P><INPUT name="options" class="input-text" type="text" required="required"></P>
+                    <P><INPUT name="options" class="input-text" type="text" required="required"></P>
+                </DD>
+                <DT>
+
+                </DT>
+                <DD class="button"><INPUT type="image" src="images/button_submit.gif">
+                    <A onclick="AddOption()" href="javascript:;">增加选项</A> <A
+                            href="http://localhost:8080/myVote/Subject-list.action">取消操作</A>
+                </DD>
+                <dd th:text="${tjsb}"></dd>
+            </DL>
+        </FORM>
+    </DIV>
+</DIV>
+<DIV class="wrap" id="footer"> 北大青鸟 © 版权所有</DIV>
+</BODY>
+</HTML>

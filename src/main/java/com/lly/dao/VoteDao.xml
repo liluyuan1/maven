@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.lly.dao.VoteDao">
+
+	<select id="selectAll" resultType="Map">
+		SELECT tid,title,TYPES,(SELECT COUNT(*) FROM OPTIONS WHERE otid=tid GROUP BY otid) alloption,
+		(SELECT COUNT(*) FROM vote WHERE vtid=tid GROUP BY vtid) votes FROM theme <include refid="btcx"/>
+	</select>
+
+
+	<sql id="btcx">
+		<where>
+			<if test="title != null and title != ''">
+				title LIKE concat('%',#{title},'%')
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectVote" resultType="Vote">
+		SELECT * FROM vote WHERE vuid = #{vuid} AND vtid = #{vtid};
+	</select>
+
+	<delete id="deleteVote">
+		DELETE FROM vote WHERE vtid = #{tid}
+	</delete>
+
+	<insert id="insertVote" parameterType="Vote">
+		INSERT INTO vote(vuid,vono,vtid) VALUES(#{vuid},#{vono},#{vtid});
+	</insert>
+</mapper>
